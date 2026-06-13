@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPI Cycle Pro | Gestão de Resíduos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --primary-color: #1e293b;
+            --accent-color: #0ea5e9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-color);
+            background-image: url('img/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #334155;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 17px;
+            line-height: 1.55;
+        }
+        .container { max-width: 920px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        
+        header { text-align: center; margin-bottom: 40px; }
+        
+        /* Título reajustado: Fonte Montserrat, moderna e levemente mais grossa (Medium 500) */
+        header h1 { 
+            font-family: 'Montserrat', sans-serif;
+            color: #007a35; 
+            font-size: 30px; 
+            font-weight: 520; 
+            letter-spacing: -0.3px;
+            margin-bottom: 20px; 
+        }
+        
+        /* Bloco informativo de normas técnicas */
+        .normas-badge-panel { 
+            background: #f8fafc; 
+            border: 1px solid var(--border-color); 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            color: #475569; 
+            text-align: left; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            width: 100%; 
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.01); 
+        }
+        .normas-badge-panel span { font-size: 24px; }
+
+        /* Blocos do Formulário: Sem ocupação se ocultos */
+        .form-section { 
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0;
+            margin-bottom: 0;
+            display: none;
+            opacity: 0;
+        }
+
+        /* ENGENHARIA DE SIMETRIA:
+           Aumentado o padding-bottom para dar espaço entre o dropdown/elemento e a linha cinza.
+           Diminuído o margin-bottom para reduzir o espaço em branco que sobrava após a linha cinza.
+           Agora a linha fica perfeitamente centralizada (equidistante). */
+        .form-section.visible {
+            display: block;
+            padding-bottom: 40px; /* Empurra a linha para baixo do dropdown */
+            margin-bottom: 32px;  /* Reduz o espaço após a linha até o próximo bloco */
+            animation: expandirCascata 0.4s ease-in-out forwards;
+        }
+
+        .form-section.visible.last-visible {
+            border-bottom: none;
+            padding-bottom: 20px;
+            margin-bottom: 0;
+        }
+
+        h3 { color: var(--primary-color); margin-bottom: 28px; font-size: 19px; display: flex; align-items: center; gap: 10px; }
+        .step-number { background: #e2e8f0; color: #475569; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px; font-weight: bold; }
+        
+        .sub-field { margin-bottom: 28px; }
+        .sub-field:last-child { margin-bottom: 0; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 16px; color: #475569; }
+        
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-color); font-size: 17px; color: #334155; outline: none; background: #f8fafc; transition: border 0.3s; }
+        select:focus { border-color: var(--accent-color); }
+
+        /* Grid de Pictogramas GHS Avançados */
+        .ghs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .ghs-card { border: 2px solid var(--border-color); padding: 15px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.2s; background: #f8fafc; }
+        .ghs-card:hover { border-color: #cbd5e1; background: #f1f5f9; }
+        .ghs-card input { transform: scale(1.3); cursor: pointer; }
+        .ghs-icon { font-size: 24px; padding: 8px; background: #e2e8f0; border-radius: 6px; display: inline-block; min-width: 44px; text-align: center; }
+
+        /* Chaves Sim/Não */
+        .toggle-group { display: flex; gap: 20px; }
+        .toggle-btn { flex: 1; border: 2px solid var(--border-color); padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 600; background: #f8fafc; transition: all 0.2s; font-size: 17px; }
+        .toggle-btn input { display: none; }
+        .toggle-btn:hover { background: #f1f5f9; }
+        .toggle-btn.selected { border-color: var(--accent-color); color: var(--accent-color); background: rgba(14, 165, 233, 0.05); }
+
+        /* Área de Envio e Resultados */
+        .action-area { text-align: center; margin-top: 0; display: none; opacity: 0; }
+        .action-area.visible { display: block; opacity: 1; margin-top: 35px; margin-bottom: 10px; padding-bottom: 10px; animation: expandirCascata 0.4s ease-in-out forwards; }
+        button { padding: 14px 40px; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; background: var(--success-color); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        button:hover { background: #059669; transform: translateY(-1px); }
+
+        .result-box { margin-top: 0; padding: 30px; border-radius: 12px; display: none; border: 2px solid #e5e7eb; border-left-width: 8px; border-left-color: #ccc; }
+        .result-box.visible { display: block; margin-top: 45px; margin-bottom: 10px; animation: expandirCascata 0.5s ease-in-out forwards; }
+        
+        .result-title { font-weight: 700; font-size: 22px; margin-bottom: 15px; }
+        .result-item { margin-bottom: 12px; font-size: 17px; }
+        .result-item strong { color: var(--primary-color); }
+        .alert-box { margin-top: 15px; padding: 12px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; color: #b45309; font-size: 16px; font-weight: 600; }
+
+        /* Cores de Resposta */
+        .color-classe-i { border-left-color: #ef4444; border-top-color: #e5e7eb; background: #fef2f2; }
+        .color-classe-i .result-title { color: #ef4444; }
+        .color-classe-i-radio { border-left-color: #f59e0b; border-top-color: #e5e7eb; background: #fffbeb; }
+        .color-classe-i-radio .result-title { color: #f59e0b; }
+        .color-classe-ii-a { border-left-color: #64748b; border-top-color: #e5e7eb; background: #f8fafc; }
+        .color-classe-ii-a .result-title { color: #64748b; }
+        .color-classe-ii-b { border-left-color: #10b981; border-top-color: #e5e7eb; background: #f0fdf4; }
+        .color-classe-ii-b .result-title { color: #10b981; }
+        
+        @keyframes expandirCascata {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>EPI Cycle Pro | Gestão de Resíduos</h1>
+        
+        <div class="normas-badge-panel">
+            <span>🛡️</span>
+            <div>
+                <strong>Conformidade Normativa de Descarte:</strong> Avaliação técnica e triagem estruturada com base nas diretrizes de segurança da <strong>NR-06 (MTE)</strong> e critérios de periculosidade da <strong>ABNT NBR 10004</strong>.
+            </div>
+        </div>
+    </header>
+
+    <div class="form-section visible last-visible" id="section-1">
+        <h3><span class="step-number">1</span> Identificação e Estado Estrutural do EPI</h3>
+        
+        <div class="sub-field">
+            <label for="familia-epi">Qual é a família do EPI?</label>
+            <select id="familia-epi" onchange="verificarValidacaoBloco1()">
+                <option value="" disabled selected>Escolha uma opção...</option>
+                <option value="1">Proteção Respiratória (Filtros / Máscaras)</option>
+                <option value="2">Proteção das Mãos (Luvas de Raspa, Vaqueta, Nitrílica)</option>
+                <option value="3">Proteção do Corpo (Vestimentas, Aventais)</option>
+                <option value="4">Calçados de Segurança (Botinas de Couro)</option>
+                <option value="5">Proteção Ocular/Facial (Óculos, Protetores)</option>
+            </select>
+        </div>
+
+        <div class="sub-field">
+            <label for="material-epi">Qual o material predominante do equipamento?</label>
+            <select id="material-epi" onchange="verificarValidacaoBloco1()">
+                <option value="" disabled selected>Escolha uma opção...</option>
+                <option value="1">Borracha / Elastômeros</option>
+                <option value="2">Couro / Raspa Natural</option>
+                <option value="3">Plástico / Polímeros Técnicos (PEAD/ABS/Policarbonato)</option>
+                <option value="4">Tecido Sintético / Fibras</option>
+                <option value="5">Componentes Metálicos</option>
+            </select>
+        </div>
+
+        <div class="sub-field">
+            <label for="motivo-descarte">Qual o principal motivo do descarte?</label>
+            <select id="motivo-descarte" onchange="verificarValidacaoBloco1()">
+                <option value="" disabled selected>Escolha uma opção...</option>
+                <option value="1">Saturação / Fim da vida útil operacional</option>
+                <option value="2">Dano físico estrutural (Rasgado, furado, quebrado)</option>
+                <option value="3">Fim da validade estipulada pelo fabricante / CA Vencido</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-section" id="section-2">
+        <h3><span class="step-number">2</span> Detalhes de Contaminação Química/Biológica (NBR 10004)</h3>
+        <div class="ghs-grid">
+            <label class="ghs-card"><input type="radio" name="contamination" value="0"> <span class="ghs-icon">🟢</span> <div><strong>Nenhuma Contaminação / Uso Comum</strong><br><small>Material apenas desgastado ou vencido</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="1"> <span class="ghs-icon">🔥</span> <div><strong>Químicos Orgânicos</strong><br><small>Solventes, tintas, hidrocarbonetos inflamáveis</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="2"> <span class="ghs-icon">🧪</span> <div><strong>Químicos Inorgânicos Corrosivos</strong><br><small>Ácidos ou bases fortes</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="3"> <span class="ghs-icon">💀</span> <div><strong>Metais Pesados</strong><br><small>Contato com Chumbo, Cromo, Mercúrio (Solda)</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="4"> <span class="ghs-icon">☣️</span> <div><strong>Biológicos / Infectocontagiosos</strong><br><small>Fluidos corporais, sangue, vírus ou bactérias</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="5"> <span class="ghs-icon">🛢️</span> <div><strong>Óleos e Graxas Pesadas</strong><br><small>Lubrificantes e resíduos de manutenção mecânica</small></div></label>
+            <label class="ghs-card"><input type="radio" name="contamination" value="6"> <span class="ghs-icon">☢️</span> <div><strong>Material Radioativo</strong><br><small>Exige triagem estrita sob normas da CNEN</small></div></label>
+        </div>
+    </div>
+
+    <div class="form-section" id="section-3">
+        <h3><span class="step-number">3</span> Riscos Físicos e Descaracterização Mecânica</h3>
+        
+        <div style="margin-bottom: 25px;">
+            <label style="font-weight:600;">O EPI apresenta risco de corte ou perfuração? (Ex: Óculos estilhaçados, farpas)</label>
+            <div class="toggle-group">
+                <label class="toggle-btn" id="lbl-corte-0"><input type="radio" name="corte" value="0" onclick="registrarRespostaFisica('corte', 0)">Não</label>
+                <label class="toggle-btn" id="lbl-corte-1"><input type="radio" name="corte" value="1" onclick="registrarRespostaFisica('corte', 1)">Sim (Perfurocortante)</label>
+            </div>
+        </div>
+
+        <div>
+            <label style="font-weight:600;">O EPI já foi devidamente descaracterizado (cortado/destruído)?</label>
+            <div class="toggle-group">
+                <label class="toggle-btn" id="lbl-desc-0"><input type="radio" name="descaracterizado" value="0" onclick="registrarRespostaFisica('desc', 0)">Não</label>
+                <label class="toggle-btn" id="lbl-desc-1"><input type="radio" name="descaracterizado" value="1" onclick="registrarRespostaFisica('desc', 1)">Sim, desestruturado de forma segura</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-area" id="btn-area">
+        <button onclick="enviarParaMotorC()">Analisar Destinação</button>
+    </div>
+
+    <div id="result" class="result-box">
+        <div class="result-title" id="res-classe"></div>
+        <div class="result-item"><strong>Ponto de Coleta Adotado:</strong> <span id="res-lixeira"></span></div>
+        <div class="result-item"><strong>Destino Tecnológico Final:</strong> <span id="res-destino"></span></div>
+        <div class="result-item"><strong>Guia de Acondicionamento:</strong> <span id="res-acond"></span></div>
+        <div id="res-alerta" class="alert-box" style="display:none;"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const radioContaminacao = document.querySelectorAll('input[name="contamination"]');
+        radioContaminacao.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    resetarBlocosPosteriorses(2);
+                    liberarBloco(3);
+                }
+            });
+        });
+        atualizarUltimoBlocoVisivel();
+    });
+
+    function verificarValidacaoBloco1() {
+        resetarBlocosPosteriorses(1);
+        
+        const familia = document.getElementById('familia-epi').value;
+        const material = document.getElementById('material-epi').value;
+        const motivo = document.getElementById('motivo-descarte').value;
+
+        if (familia !== "" && material !== "" && motivo !== "") {
+            liberarBloco(2);
+        } else {
+            recolherFormularioCompleto();
+            fecharBlocosApos(1);
+        }
+    }
+
+    function recolherFormularioCompleto() {
+        document.getElementById('section-2').classList.remove('visible');
+        document.getElementById('section-3').classList.remove('visible');
+        document.getElementById('btn-area').classList.remove('visible');
+        document.getElementById('result').classList.remove('visible');
+        
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(r => r.checked = false);
+
+        document.getElementById('lbl-corte-0').classList.remove('selected');
+        document.getElementById('lbl-corte-1').classList.remove('selected');
+        document.getElementById('lbl-desc-0').classList.remove('selected');
+        document.getElementById('lbl-desc-1').classList.remove('selected');
+
+        atualizarUltimoBlocoVisivel();
+    }
+
+    function liberarBloco(numeroBloco) {
+        if (numeroBloco === 3) {
+            document.getElementById('btn-area').classList.remove('visible');
+            document.getElementById('result').classList.remove('visible');
+        }
+        document.getElementById(`section-${numeroBloco}`).classList.add('visible');
+        atualizarUltimoBlocoVisivel();
+    }
+
+    function atualizarUltimoBlocoVisivel() {
+        const blocos = [
+            document.getElementById('section-1'),
+            document.getElementById('section-2'),
+            document.getElementById('section-3')
+        ];
+
+        blocos.forEach((bloco, index) => {
+            if (!bloco) return;
+            bloco.classList.remove('last-visible');
+
+            const proximo = blocos[index + 1];
+            if (bloco.classList.contains('visible') && (!proximo || !proximo.classList.contains('visible'))) {
+                bloco.classList.add('last-visible');
+            }
+        });
+    }
+
+    function fecharBlocosApos(numeroBloco) {
+        for (let i = numeroBloco + 1; i <= 3; i++) {
+            const bloco = document.getElementById(`section-${i}`);
+            if (bloco) {
+                bloco.classList.remove('visible', 'last-visible');
+            }
+        }
+        
+        if (numeroBloco < 3) {
+            document.getElementById('btn-area').classList.remove('visible');
+            document.getElementById('result').classList.remove('visible');
+        }
+        
+        // Limpar apenas radios dos blocos que estão sendo fechados
+        if (numeroBloco < 3) {
+            const radiosBloco3 = document.querySelectorAll('input[name="corte"], input[name="descaracterizado"]');
+            radiosBloco3.forEach(r => r.checked = false);
+            
+            document.getElementById('lbl-corte-0').classList.remove('selected');
+            document.getElementById('lbl-corte-1').classList.remove('selected');
+            document.getElementById('lbl-desc-0').classList.remove('selected');
+            document.getElementById('lbl-desc-1').classList.remove('selected');
+        }
+        
+        if (numeroBloco < 2) {
+            const radiosBloco2 = document.querySelectorAll('input[name="contamination"]');
+            radiosBloco2.forEach(r => r.checked = false);
+        }
+
+        atualizarUltimoBlocoVisivel();
+    }
+
+    function resetarBlocosPosteriorses(numeroBloco) {
+        fecharBlocosApos(numeroBloco);
+    }
+
+    function registrarRespostaFisica(tipo, valor) {
+        document.getElementById(`lbl-${tipo}-0`).classList.remove('selected');
+        document.getElementById(`lbl-${tipo}-1`).classList.remove('selected');
+        document.getElementById(`lbl-${tipo}-${valor}`).classList.add('selected');
+        
+        document.querySelector(`input[name="${tipo === 'corte' ? 'corte' : 'descaracterizado'}"][value="${valor}"]`).checked = true;
+        
+        document.getElementById('btn-area').classList.remove('visible');
+        document.getElementById('result').classList.remove('visible');
+        
+        verificarFimFormulario();
+    }
+
+    function verificarFimFormulario() {
+        const cortePreenchido = document.querySelector('input[name="corte"]:checked');
+        const descPreenchido = document.querySelector('input[name="descaracterizado"]:checked');
+        
+        if (cortePreenchido && descPreenchido) {
+            document.getElementById('btn-area').classList.add('visible');
+        }
+    }
+
+    async function enviarParaMotorC() {
+        const familia = document.getElementById('familia-epi').value;
+        const material = document.getElementById('material-epi').value;
+        const motivo = document.getElementById('motivo-descarte').value;
+        const cont = document.querySelector('input[name="contamination"]:checked').value;
+        const riscoCorte = document.querySelector('input[name="corte"]:checked').value;
+        const descaracterizado = document.querySelector('input[name="descaracterizado"]:checked').value;
+
+        try {
+            const response = await fetch('/analisar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `familia=${familia}&material=${material}&motivo=${motivo}&contaminado=${cont}&riscoCorte=${riscoCorte}&descaracterizado=${descaracterizado}`
+            });
+
+            const dadosC = await response.json();
+
+            const rBox = document.getElementById('result');
+            rBox.className = "result-box visible"; 
+            const classe = dadosC.classe || '';
+
+            if (classe.includes("Radioativo")) {
+                rBox.classList.add('color-classe-i-radio');
+            } else if (classe.includes("II-A")) {
+                rBox.classList.add('color-classe-ii-a');
+            } else if (classe.includes("II-B")) {
+                rBox.classList.add('color-classe-ii-b');
+            } else if (classe.includes("Classe I")) {
+                rBox.classList.add('color-classe-i');
+            } else {
+                rBox.classList.add('color-classe-ii-b');
+            }
+
+            document.getElementById('res-classe').innerText = "Resultado Técnico: " + dadosC.classe;
+            document.getElementById('res-lixeira').innerText = dadosC.lixeira;
+            document.getElementById('res-destino').innerText = dadosC.destino;
+            document.getElementById('res-acond').innerText = dadosC.acondicionamento;
+
+            const alertaBox = document.getElementById('res-alerta');
+            if(dadosC.alerta !== "") {
+                alertaBox.innerText = dadosC.alerta;
+                alertaBox.style.display = 'block';
+            } else {
+                alertaBox.style.display = 'none';
+            }
+
+            setTimeout(() => {
+                rBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+
+        } catch (error) {
+            alert("Erro de comunicação: O Servidor nativo em C está offline!");
+        }
+    }
+</script>
+</body>
+</html>
