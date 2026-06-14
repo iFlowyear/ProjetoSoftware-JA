@@ -38,7 +38,6 @@
         
         header { text-align: center; margin-bottom: 40px; }
         
-        /* Título reajustado: Fonte Montserrat, moderna e levemente mais grossa (Medium 500) */
         header h1 { 
             font-family: 'Montserrat', sans-serif;
             color: #007a35; 
@@ -48,7 +47,6 @@
             margin-bottom: 20px; 
         }
         
-        /* Bloco informativo de normas técnicas */
         .normas-badge-panel { 
             background: #f8fafc; 
             border: 1px solid var(--border-color); 
@@ -65,7 +63,6 @@
         }
         .normas-badge-panel span { font-size: 24px; }
 
-        /* Blocos do Formulário: Sem ocupação se ocultos */
         .form-section { 
             border-bottom: 2px solid #f1f5f9;
             padding-bottom: 0;
@@ -74,14 +71,10 @@
             opacity: 0;
         }
 
-        /* ENGENHARIA DE SIMETRIA:
-           Aumentado o padding-bottom para dar espaço entre o dropdown/elemento e a linha cinza.
-           Diminuído o margin-bottom para reduzir o espaço em branco que sobrava após a linha cinza.
-           Agora a linha fica perfeitamente centralizada (equidistante). */
         .form-section.visible {
             display: block;
-            padding-bottom: 40px; /* Empurra a linha para baixo do dropdown */
-            margin-bottom: 32px;  /* Reduz o espaço após a linha até o próximo bloco */
+            padding-bottom: 40px;
+            margin-bottom: 32px;
             animation: expandirCascata 0.4s ease-in-out forwards;
         }
 
@@ -101,21 +94,18 @@
         select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-color); font-size: 17px; color: #334155; outline: none; background: #f8fafc; transition: border 0.3s; }
         select:focus { border-color: var(--accent-color); }
 
-        /* Grid de Pictogramas GHS Avançados */
         .ghs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .ghs-card { border: 2px solid var(--border-color); padding: 15px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.2s; background: #f8fafc; }
         .ghs-card:hover { border-color: #cbd5e1; background: #f1f5f9; }
         .ghs-card input { transform: scale(1.3); cursor: pointer; }
         .ghs-icon { font-size: 24px; padding: 8px; background: #e2e8f0; border-radius: 6px; display: inline-block; min-width: 44px; text-align: center; }
 
-        /* Chaves Sim/Não */
         .toggle-group { display: flex; gap: 20px; }
         .toggle-btn { flex: 1; border: 2px solid var(--border-color); padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 600; background: #f8fafc; transition: all 0.2s; font-size: 17px; }
         .toggle-btn input { display: none; }
         .toggle-btn:hover { background: #f1f5f9; }
         .toggle-btn.selected { border-color: var(--accent-color); color: var(--accent-color); background: rgba(14, 165, 233, 0.05); }
 
-        /* Área de Envio e Resultados */
         .action-area { text-align: center; margin-top: 0; display: none; opacity: 0; }
         .action-area.visible { display: block; opacity: 1; margin-top: 35px; margin-bottom: 10px; padding-bottom: 10px; animation: expandirCascata 0.4s ease-in-out forwards; }
         button { padding: 14px 40px; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; background: var(--success-color); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
@@ -129,7 +119,6 @@
         .result-item strong { color: var(--primary-color); }
         .alert-box { margin-top: 15px; padding: 12px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; color: #b45309; font-size: 16px; font-weight: 600; }
 
-        /* Cores de Resposta */
         .color-classe-i { border-left-color: #ef4444; border-top-color: #e5e7eb; background: #fef2f2; }
         .color-classe-i .result-title { color: #ef4444; }
         .color-classe-i-radio { border-left-color: #f59e0b; border-top-color: #e5e7eb; background: #fffbeb; }
@@ -329,7 +318,6 @@
             document.getElementById('result').classList.remove('visible');
         }
         
-        // Limpar apenas radios dos blocos que estão sendo fechados
         if (numeroBloco < 3) {
             const radiosBloco3 = document.querySelectorAll('input[name="corte"], input[name="descaracterizado"]');
             radiosBloco3.forEach(r => r.checked = false);
