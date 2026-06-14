@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Para funcionar com Threads (Multitarefa)
+// Para funcionar com threads (multitarefa)
 #ifdef _WIN32
 #include <windows.h>
 #define THREAD_RETURN DWORD WINAPI
@@ -59,7 +59,7 @@ void calcular_triagem(int id_familia, int id_material, int id_motivo, int id_con
     }
 }
 
-// Rota WEB (Netlify -> Mongoose)
+// Rota web (Netlify -> Mongoose)
 void processar_triagem_avancada(struct mg_connection *c, struct mg_http_message *hm) {
     char familia_buf[10] = {0}, material_buf[10] = {0}, motivo_buf[10] = {0};
     char cont_buf[10] = {0}, corte_buf[10] = {0}, desc_buf[10] = {0};
@@ -107,7 +107,7 @@ static void evento_http_handler(struct mg_connection *c, int ev, void *ev_data) 
     }
 }
 
-// Thread paralela que mantém o servidor Web escutando de fundo
+// Thread paralela que mantém o servidor web escutando de fundo
 THREAD_RETURN rodar_servidor_web(void *arg) {
     struct mg_mgr *mgr = (struct mg_mgr *)arg;
     for (;;) {
@@ -116,8 +116,7 @@ THREAD_RETURN rodar_servidor_web(void *arg) {
     return 0;
 }
 
-// Menu Interativo via Terminal (Questionário Numérico)
-// Menu Interativo via Terminal (Questionário Numérico com Limpeza de Buffer)
+// Menu interativo via terminal (questionário numérico com limpeza de buffer)
 void rodar_questionario_terminal(void) {
     int fam, mat, mot, cont, corte, desc;
     char classe[100], lixeira[100], destino[200], acondicionamento[300], alerta[300];
@@ -132,7 +131,7 @@ void rodar_questionario_terminal(void) {
     while(1) {
         printf("\n--- QUESTIONARIO DE TRIAGEM EPI-CYCLE ---\n");
         printf("Familia (1=Respiratoria, 2=Maos, 3=Corpo, 4=Calcados, 5=Ocular): ");
-        fflush(stdout); // 👈 Força o texto a aparecer na tela IMEDIATAMENTE
+        fflush(stdout); // Força o texto a aparecer na tela IMEDIATAMENTE
         
         if (scanf("%d", &fam) <= 0) {
             // Limpa o caractere inválido se o usuário digitar algo errado
@@ -174,23 +173,24 @@ void rodar_questionario_terminal(void) {
 }
 
 int main(void) {
+  
     // Força o terminal do Windows a aceitar UTF-8 e renderizar os emojis certinho
     #ifdef _WIN32
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
     #endif
 
-    struct mg_mgr mgr; // 👈 DEIXE APENAS UMA DESSA
+    struct mg_mgr mgr;
     mg_mgr_init(&mgr);
     
     const char *port = getenv("PORT");
     char listen_addr[50];
     if (port == NULL) {
         port = "3000";
-        // Se estiver no seu computador local, força o Mongoose a ligar-se ao IP correto
+        // Se estiver no computador local, força o Mongoose a ligar no IP correto
         snprintf(listen_addr, sizeof(listen_addr), "http://127.0.0.1:%s", port);
     } else {
-        // Se estiver na nuvem (Render/Netlify), usa o padrão para aceitar a rede externa
+        // Se estiver na nuvem usa o padrão para aceitar a rede externa
         snprintf(listen_addr, sizeof(listen_addr), "http://0.0.0.0:%s", port);
     }
     
@@ -201,7 +201,7 @@ int main(void) {
     printf("  Servidor Web escutando em: %s                     \n", listen_addr);
     printf("====================================================\n");
 
-    // Inicia a tarefa de fundo da Web de acordo com o Sistema Operacional
+    // Inicia a tarefa de fundo da web de acordo com o sistema operacional
 #ifdef _WIN32
     CreateThread(NULL, 0, rodar_servidor_web, &mgr, 0, NULL);
 #else
