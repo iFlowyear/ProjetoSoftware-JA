@@ -383,7 +383,7 @@
         const descaracterizado = document.querySelector('input[name="descaracterizado"]:checked').value;
 
         try {
-            const response = await fetch('/analisar', {
+            const response = await fetch('http://127.0.0.1:3000/analisar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `familia=${familia}&material=${material}&motivo=${motivo}&contaminado=${cont}&riscoCorte=${riscoCorte}&descaracterizado=${descaracterizado}`
