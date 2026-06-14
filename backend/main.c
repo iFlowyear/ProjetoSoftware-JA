@@ -18,43 +18,43 @@ void calcular_triagem(int id_familia, int id_material, int id_motivo, int id_con
     alerta[0] = '\0';
 
     if (descaracterizado == 0) {
-        snprintf(alerta, max_len, "⚠️ REQUISITO OPERACIONAL: Recomenda-se fragmentar ou cortar o EPI antes de envia-lo ao descarte.");
+        snprintf(alerta, max_len, "⚠️ REQUISITO OPERACIONAL: Recomenda-se fragmentar ou cortar o EPI antes de enviá-lo ao descarte.");
     }
 
     if (id_contaminante == 6) { 
         snprintf(classe, max_len, "Classe I - Perigoso (Radioativo)");
-        snprintf(lixeira, max_len, "Deposito Blindado de Rejeitos Radioativos (Area Controlada)");
+        snprintf(lixeira, max_len, "Depósito Blindado de Rejeitos Radioativos (Área Controlada)");
         snprintf(destino, max_len, "Isolamento Decadencial e Gerenciamento Estrito sob Diretrizes da CNEN.");
         snprintf(acondicionamento, max_len, "Acondicionar em recipientes de chumbo ou caixas blindadas apropriadas.");
     } else if (id_contaminante == 4) { 
         snprintf(classe, max_len, "Classe I - Perigoso (Grupo A - Infectante)");
-        snprintf(lixeira, max_len, "Lixeira Branca Industrial (Residuos Infectocontagiosos)");
-        snprintf(destino, max_len, "Tratamento previo por Autoclavagem ou Incineracao Industrial Certificada.");
-        snprintf(acondicionamento, max_len, "Acondicionar obrigatoriamente em saco plastico branco leitoso.");
+        snprintf(lixeira, max_len, "Lixeira Branca Industrial (Resíduos Infectocontagiosos)");
+        snprintf(destino, max_len, "Tratamento previo por Autoclavagem ou Incineração Industrial Certificada.");
+        snprintf(acondicionamento, max_len, "Acondicionar obrigatoriamente em saco plástico branco leitoso.");
     } else if (id_contaminante == 1 || id_contaminante == 2 || id_contaminante == 3 || id_contaminante == 5 || id_familia == 1) {
-        snprintf(classe, max_len, "Classe I - Perigoso (Quimico / Industrial)");
-        snprintf(lixeira, max_len, "Lixeira Laranja (Setores Industriais / Residuos Perigosos)");
-        snprintf(destino, max_len, "Destinacao para Coprocessamento em fornos ou Incineracao Termica.");
-        snprintf(acondicionamento, max_len, "Acondicionar em sacos plasticos de alta resistencia quimica.");
+        snprintf(classe, max_len, "Classe I - Perigoso (Químico / Industrial)");
+        snprintf(lixeira, max_len, "Lixeira Laranja (Setores Industriais / Resíduos Perigosos)");
+        snprintf(destino, max_len, "Destinação para Coprocessamento em fornos ou Incineração Térmica.");
+        snprintf(acondicionamento, max_len, "Acondicionar em sacos plásticos de alta resistência química.");
     } else { 
         if (risco_corte == 1) {
-            snprintf(acondicionamento, max_len, "⚠️ ALERTA: Acondicionar obrigatoriamente em RECIPIENTES RIGIDOS E ESTANQUES.");
+            snprintf(acondicionamento, max_len, "⚠️ ALERTA: Acondicionar obrigatoriamente em RECIPIENTES RÍGIDOS E ESTANQUES.");
         } else {
             snprintf(acondicionamento, max_len, "Acondicionar em sacos de alta densidade ou caixas padronizadas.");
         }
 
         if (id_material == 3) { 
-            snprintf(classe, max_len, "Classe II-B - Inerte (Reciclavel)");
-            snprintf(lixeira, max_len, "Lixeira Vermelha (Plasticos Tecnicos Limpos)");
-            snprintf(destino, max_len, "Encaminhar para moagem e reciclagem polimerica.");
+            snprintf(classe, max_len, "Classe II-B - Inerte (Reciclável)");
+            snprintf(lixeira, max_len, "Lixeira Vermelha (Plásticos Técnicos Limpos)");
+            snprintf(destino, max_len, "Encaminhar para moagem e reciclagem polimérica.");
         } else if (id_material == 2 || id_material == 1) { 
-            snprintf(classe, max_len, "Classe II-A - Nao Inerte (Rejeito Comum)");
-            snprintf(lixeira, max_len, "Lixeira Cinza (Residuo Geral Nao Reciclavel)");
-            snprintf(destino, max_len, "Disposicao final em Aterro Industrial Licenciado.");
+            snprintf(classe, max_len, "Classe II-A - Não Inerte (Rejeito Comum)");
+            snprintf(lixeira, max_len, "Lixeira Cinza (Resíduo Geral Não Reciclável)");
+            snprintf(destino, max_len, "Disposição final em Aterro Industrial Licenciado.");
         } else {
             snprintf(classe, max_len, "Classe II-B - Inerte");
             snprintf(lixeira, max_len, "Coleta Comum / Tambor Cinza");
-            snprintf(destino, max_len, "Aterro Sanitario Industrial Licenciado.");
+            snprintf(destino, max_len, "Aterro Sanitário Industrial Licenciado.");
         }
     }
 }
